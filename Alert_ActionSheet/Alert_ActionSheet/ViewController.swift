@@ -9,10 +9,17 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
     @IBOutlet weak var resultLabel: UILabel!
+    
     @IBAction func show(_ sender: UIButton) {
+
+        // Alert 으로 표시
+//        let controller = UIAlertController(title: "Languages", message: "Choose one", preferredStyle: .alert)
+        // ActionSheet 으로 표시
+        let controller = UIAlertController(title: "Languages", message: "Choose one", preferredStyle: .actionSheet)
         
-        let controller = UIAlertController(title: "Languages", message: "Choose one", preferredStyle: .alert)
+        
         
         let swiftAction = UIAlertAction(title: "Swift", style: .default) { [weak self] (action) in
             self?.resultLabel.text = action.title
@@ -41,6 +48,19 @@ class ViewController: UIViewController {
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         controller.addAction(cancelAction)
+        
+        // 이 속성이 nil 이 아니라면 popover 형태로 표시됩니다.
+        if let pc = controller.popoverPresentationController{
+            pc.sourceRect = sender.frame
+            pc.sourceView = view
+        }
+        
+        for action in controller.actions {
+            if action.title == resultLabel.text {
+                action.isEnabled = false
+            }
+        }
+        
         
         present(controller, animated: true, completion: nil)
         
